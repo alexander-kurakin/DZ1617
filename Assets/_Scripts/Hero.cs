@@ -11,14 +11,14 @@ public class Hero : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _rotateSpeed;
 
-    private CharacterController _characterController;
     private SmoothRotator _smoothRotator = new SmoothRotator();
+    private Mover _mover;
 
     private float _deadZone = 0.1f;
 
     private void Awake()
     {
-        _characterController = GetComponent<CharacterController>();
+        _mover = GetComponent<Mover>();
     }
 
     private void Update()
@@ -32,13 +32,8 @@ public class Hero : MonoBehaviour
             return;
         }
 
-        ProcessMoveTo(normalizedInput);
-        _smoothRotator.ProcessRotateTo(transform, _rotateSpeed, normalizedInput);
-    }
-
-    private void ProcessMoveTo(Vector3 direction)
-    {
         _animator.SetBool(RunningAnimParam, true);
-        _characterController.Move(direction * _speed * Time.deltaTime);
+        _mover.ProcessMoveTo(normalizedInput, _speed);
+        _smoothRotator.ProcessRotateTo(transform, _rotateSpeed, normalizedInput);
     }
 }
