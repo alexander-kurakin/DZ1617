@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
 
     private bool _isInitialized = false;
     private Color _currentGizmosColor;
+    private Hero _collidedHero;
 
     public void Initialize(IBehaviour idleBehaviour, IBehaviour reactionBehaviour)
     {
@@ -32,11 +33,17 @@ public class Enemy : MonoBehaviour
     {
         if (other.TryGetComponent<Hero>(out Hero hero))
         {
+            _collidedHero = hero;
             SwitchBehaviour(_reactionBehaviour);
             _currentGizmosColor = new Color(0f, 1f, 0f, 0.25f);
         }
-        else
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<Hero>(out Hero hero))
         {
+            _currentGizmosColor = new Color(1f, 0f, 0f, 0.25f);
             SwitchBehaviour(_idleBehaviour);
         }
     }
@@ -58,5 +65,10 @@ public class Enemy : MonoBehaviour
     {
         //play effect
         Destroy(gameObject);
+    }
+
+    public Hero GetCollidedHero()
+    {
+        return _collidedHero;
     }
 }

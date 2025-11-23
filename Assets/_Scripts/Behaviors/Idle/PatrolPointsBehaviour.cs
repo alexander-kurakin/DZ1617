@@ -24,7 +24,6 @@ public class PatrolPointsBehaviour : IBehaviour
 
     public void Exit()
     {
-        _patrolPoints.Clear();
     }
 
     public void Update()

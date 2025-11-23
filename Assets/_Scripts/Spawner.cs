@@ -34,10 +34,10 @@ public class Spawner : MonoBehaviour
                 return new ChaoticMovementBehaviour(enemy.GetComponent<Mover>(), _centralPoint);
 
             case BehaviourType.RunawayBehaviour:
-                return new RunawayBehaviour();
+                return new RunawayBehaviour(enemy, enemy.GetComponent<Mover>());
 
             case BehaviourType.ChasingBehaviour:
-                return new ChasingBehaviour();
+                return new ChasingBehaviour(enemy, enemy.GetComponent<Mover>());
 
             case BehaviourType.InstantDeathBehaviour:
                 return new InstantDeathBehaviour(enemy);
