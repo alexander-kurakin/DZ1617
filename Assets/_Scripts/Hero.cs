@@ -33,7 +33,7 @@ public class Hero : MonoBehaviour
         }
 
         _animator.SetBool(RunningAnimParam, true);
-        _mover.ProcessMoveTo(normalizedInput, _speed);
+        _mover.ProcessCharacterMoveTo(normalizedInput, _speed);
         _smoothRotator.ProcessRotateTo(transform, _rotateSpeed, normalizedInput);
     }
 }

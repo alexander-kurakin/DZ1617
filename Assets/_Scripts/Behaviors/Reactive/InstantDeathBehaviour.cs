@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class InstantDeathBehaviour : IBehaviour
 {
+    private Enemy _enemy;
+    public InstantDeathBehaviour(Enemy enemy)
+    { 
+        _enemy = enemy;
+    }
     public void Enter()
     {
-        throw new System.NotImplementedException();
+        _enemy.DestroyEnemy();
     }
 
     public void Exit()
     {
-        throw new System.NotImplementedException();
     }
 
     public void Update()
     {
-        throw new System.NotImplementedException();
     }
 }

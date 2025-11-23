@@ -4,9 +4,10 @@ public class Mover : MonoBehaviour
 {
     [SerializeField] private CharacterController _characterController;
 
-    public void ProcessMoveTo(Vector3 direction, float speed)
+    public void ProcessCharacterMoveTo(Vector3 direction, float speed)
     {
         _characterController.Move(direction * speed * Time.deltaTime);
+        Debug.DrawRay(transform.position, direction, Color.yellow);
     }
 
     public void ProcessTranslatedMoveTo(Vector3 direction, float speed)

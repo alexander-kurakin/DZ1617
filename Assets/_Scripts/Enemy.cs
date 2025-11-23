@@ -8,9 +8,11 @@ public class Enemy : MonoBehaviour
     private IBehaviour _currentBehaviour;
 
     private bool _isInitialized = false;
+    private Color _currentGizmosColor;
 
     public void Initialize(IBehaviour idleBehaviour, IBehaviour reactionBehaviour)
     {
+        _currentGizmosColor = new Color(1f, 0f, 0f, 0.25f);
         _idleBehaviour = idleBehaviour;
         _reactionBehaviour = reactionBehaviour;
 
@@ -29,14 +31,19 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<Hero>(out Hero hero))
+        {
             SwitchBehaviour(_reactionBehaviour);
+            _currentGizmosColor = new Color(0f, 1f, 0f, 0.25f);
+        }
         else
+        {
             SwitchBehaviour(_idleBehaviour);
+        }
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
+        Gizmos.color = _currentGizmosColor;
         Gizmos.DrawSphere(transform.position, 2.5f);
     }
 
@@ -45,5 +52,11 @@ public class Enemy : MonoBehaviour
         _currentBehaviour.Exit();
         _currentBehaviour = behaviour;
         _currentBehaviour.Enter();
+    }
+
+    public void DestroyEnemy()
+    {
+        //play effect
+        Destroy(gameObject);
     }
 }

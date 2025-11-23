@@ -40,7 +40,7 @@ public class Spawner : MonoBehaviour
                 return new ChasingBehaviour();
 
             case BehaviourType.InstantDeathBehaviour:
-                return new InstantDeathBehaviour();
+                return new InstantDeathBehaviour(enemy);
 
             default:
                 return null;

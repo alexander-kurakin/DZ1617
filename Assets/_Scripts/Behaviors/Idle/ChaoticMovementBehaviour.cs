@@ -5,15 +5,18 @@ using UnityEngine;
 
 public class ChaoticMovementBehaviour : IBehaviour
 {
+    private const float Speed = 0.5f;
+    private const float PointsSpawnRadius = 10f;
+    private const float ArenaRadius = 8.5f;
+    private const float ChaoticRunTime = 1f;
+    private const float EscapeRunTime = 1f;
+
     private Mover _mover;
     private Transform _centralPointTransform;
     private Vector3 _currentDirection;
 
-    private float _speed = 0.5f;
-    private float _pointsSpawnRadius = 10f;
-    private float _arenaRadius = 8.5f;
-    private float _timer;
-    private bool _isEscapingBoundary;
+    private float _chaoticTimer;
+    private float _escapeTimer;
 
     public ChaoticMovementBehaviour(Mover mover, Transform centralPointTransform)
     {
@@ -21,13 +24,12 @@ public class ChaoticMovementBehaviour : IBehaviour
         _centralPointTransform = centralPointTransform;
     }
 
-
     public void Enter()
     {
         _currentDirection = GetNextTarget();
-        _mover.ProcessTranslatedMoveTo(_currentDirection, _speed);
+        _mover.ProcessTranslatedMoveTo(_currentDirection, Speed);
 
-        _timer = 1f;
+        _chaoticTimer = ChaoticRunTime;
     }
 
     public void Exit()
@@ -36,31 +38,47 @@ public class ChaoticMovementBehaviour : IBehaviour
 
     public void Update()
     {
-        _timer -= Time.deltaTime;
+        ProcessTimers();
 
-        if (_timer <= 0f)
-        {
-            if (_isEscapingBoundary == false)
-                _currentDirection = GetNextTarget();
-            else 
-                _isEscapingBoundary = false;
-            
-            _timer = 1f;
-        }
+        ResetChaoticPosition();
 
-        if ((_mover.GetMovingObjectTransform().position - _centralPointTransform.position).magnitude > _arenaRadius)
-        {
-            _timer = 2f;
-            _mover.ProcessTranslatedMoveTo(_centralPointTransform.position - _mover.GetMovingObjectTransform().position, _speed);
-            _isEscapingBoundary = true;
-        }
+        ValidateOutOfBoundaries();
+
+        ProcessMovement();
+    }
+
+    private void ProcessTimers()
+    {
+        _chaoticTimer -= Time.deltaTime;
+        _escapeTimer -= Time.deltaTime;
+    }
+
+    private void ValidateOutOfBoundaries()
+    {
+        if ((_mover.GetMovingObjectTransform().position - _centralPointTransform.position).magnitude > ArenaRadius)
+            _escapeTimer = EscapeRunTime;
+    }
+
+    private void ProcessMovement()
+    {
+        if (_escapeTimer > 0f)
+            _mover.ProcessTranslatedMoveTo(_centralPointTransform.position - _mover.GetMovingObjectTransform().position, Speed);
         else
-            _mover.ProcessTranslatedMoveTo(_currentDirection, _speed);
+            _mover.ProcessTranslatedMoveTo(_currentDirection, Speed);
+    }
+
+    private void ResetChaoticPosition()
+    {
+        if (_chaoticTimer <= 0f)
+        {
+            _currentDirection = GetNextTarget();
+            _chaoticTimer = ChaoticRunTime;
+        }
     }
 
     private Vector3 GetNextTarget()
     {
-        Vector3 result = new Vector3(Random.Range(-_pointsSpawnRadius, _pointsSpawnRadius), 0, Random.Range(-_pointsSpawnRadius, _pointsSpawnRadius));
+        Vector3 result = new Vector3(Random.Range(-PointsSpawnRadius, PointsSpawnRadius), 0, Random.Range(-PointsSpawnRadius, PointsSpawnRadius));
                 
         return result;
     }
