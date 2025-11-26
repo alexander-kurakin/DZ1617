@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ChasingBehaviour : IBehaviour
@@ -7,22 +5,19 @@ public class ChasingBehaviour : IBehaviour
     private const float Speed = 1f;
 
     private Mover _mover;
-    private Enemy _enemy;
-    private Hero _hero;
-
+    private Transform _chaseTarget;
     private Vector3 _currentTarget;
     
 
-    public ChasingBehaviour(Enemy enemy, Mover mover) 
+    public ChasingBehaviour(Transform chaseTarget, Mover mover) 
     {
         _mover = mover;
-        _enemy = enemy;
+        _chaseTarget = chaseTarget;
     }
 
     public void Enter()
     {
-        _hero = _enemy.GetCollidedHero();
-        _currentTarget = _hero.transform.position;
+        _currentTarget = _chaseTarget.position;
     }
 
     public void Exit()
@@ -32,7 +27,7 @@ public class ChasingBehaviour : IBehaviour
 
     public void Update()
     {
-        _currentTarget = _hero.transform.position;
+        _currentTarget = _chaseTarget.position;
 
         Vector3 direction = new Vector3(_currentTarget.x - _mover.transform.position.x, 0, _currentTarget.z - _mover.transform.position.z);
 

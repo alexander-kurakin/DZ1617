@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    [SerializeField] private Transform _chasingTarget;
+    [SerializeField] private Transform _runawayTarget;
     [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private List<Transform> _targets;
     [SerializeField] private Transform _centralPoint;
@@ -34,10 +36,10 @@ public class Spawner : MonoBehaviour
                 return new ChaoticMovementBehaviour(enemy.GetComponent<Mover>(), _centralPoint);
 
             case BehaviourType.RunawayBehaviour:
-                return new RunawayBehaviour(enemy, enemy.GetComponent<Mover>());
+                return new RunawayBehaviour(_runawayTarget, enemy.GetComponent<Mover>());
 
             case BehaviourType.ChasingBehaviour:
-                return new ChasingBehaviour(enemy, enemy.GetComponent<Mover>());
+                return new ChasingBehaviour(_chasingTarget, enemy.GetComponent<Mover>());
 
             case BehaviourType.InstantDeathBehaviour:
                 return new InstantDeathBehaviour(enemy);

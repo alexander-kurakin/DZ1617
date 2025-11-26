@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IKillable
 {
     private const float InteractRadius = 2.5f;
 
@@ -10,7 +10,6 @@ public class Enemy : MonoBehaviour
     private IBehaviour _reactionBehaviour;
     private IBehaviour _currentBehaviour;
 
-    private Hero _collidedHero;
     private Color _currentGizmosColor;
     private Color _transparentRed = new Color(1f, 0f, 0f, 0.25f);
     private Color _transparentGreen = new Color(0f, 1f, 0f, 0.25f);
@@ -40,9 +39,8 @@ public class Enemy : MonoBehaviour
     {
         if (other.TryGetComponent<Hero>(out Hero hero))
         {
-            _collidedHero = hero;
-            SwitchBehaviour(_reactionBehaviour);
             _currentGizmosColor = _transparentGreen;
+            SwitchBehaviour(_reactionBehaviour);
         }
     }
 
@@ -68,14 +66,9 @@ public class Enemy : MonoBehaviour
         _currentBehaviour.Enter();
     }
 
-    public void DestroyEnemy()
+    public void Kill()
     {
         Instantiate(_destroyEffect, transform.position, Quaternion.identity, null);
         Destroy(gameObject);
-    }
-
-    public Hero GetCollidedHero()
-    {
-        return _collidedHero;
     }
 }

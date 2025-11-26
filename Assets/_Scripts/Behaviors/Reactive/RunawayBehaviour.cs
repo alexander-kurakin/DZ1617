@@ -7,21 +7,18 @@ public class RunawayBehaviour : IBehaviour
     private const float Speed = 1f;
 
     private Mover _mover;
-    private Enemy _enemy;
-    private Hero _hero;
-
+    private Transform _runawayTarget;
     private Vector3 _currentTarget;
     
 
-    public RunawayBehaviour(Enemy enemy, Mover mover)
+    public RunawayBehaviour(Transform runawayTarget, Mover mover)
     {
         _mover = mover;
-        _enemy = enemy;
+        _runawayTarget = runawayTarget;
     }
     public void Enter()
     {
-        _hero = _enemy.GetCollidedHero();
-        _currentTarget = _hero.transform.position;
+        _currentTarget = _runawayTarget.position;
     }
 
     public void Exit()
@@ -31,7 +28,7 @@ public class RunawayBehaviour : IBehaviour
 
     public void Update()
     {
-        _currentTarget = _hero.transform.position;
+        _currentTarget = _runawayTarget.position;
 
         Vector3 direction = new Vector3(_mover.transform.position.x - _currentTarget.x, 0, _mover.transform.position.z - _currentTarget.z);
 

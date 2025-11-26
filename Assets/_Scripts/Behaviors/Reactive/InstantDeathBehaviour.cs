@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class InstantDeathBehaviour : IBehaviour
 {
-    private Enemy _enemy;
-    public InstantDeathBehaviour(Enemy enemy)
+    private IKillable _killTarget;
+    public InstantDeathBehaviour(IKillable killTarget)
     { 
-        _enemy = enemy;
+        _killTarget = killTarget;
     }
     public void Enter()
     {
-        _enemy.DestroyEnemy();
+        _killTarget.Kill();
     }
 
     public void Exit()
